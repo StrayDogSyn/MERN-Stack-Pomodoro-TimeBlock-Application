@@ -23,6 +23,7 @@ const io = new Server(server, {
   cors: {
     origin: [
       process.env.CLIENT_URL || "http://localhost:5173",
+      "https://trae5tthwuf3.vercel.app",
       "https://traesithhur3.vercel.app",
       "https://trae5tthwuf3-straydogsyn-eric-hunter-petross-projects.vercel.app"
     ],
@@ -37,6 +38,7 @@ connectDatabase();
 app.use(cors({
   origin: [
     process.env.CLIENT_URL || "http://localhost:5173",
+    "https://trae5tthwuf3.vercel.app",
     "https://traesithhur3.vercel.app",
     "https://trae5tthwuf3-straydogsyn-eric-hunter-petross-projects.vercel.app"
   ],
@@ -112,7 +114,7 @@ io.on('connection', (socket) => {
 });
 
 // Error handling middleware
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: Error & { status?: number }, req: express.Request, res: express.Response) => {
   console.error('Error:', err);
   res.status(err.status || 500).json({
     success: false,

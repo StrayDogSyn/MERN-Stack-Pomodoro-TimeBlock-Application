@@ -1,6 +1,15 @@
 import { create } from 'zustand';
 import axios from 'axios';
 
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+  message?: string;
+}
+
 export interface TimeBlock {
   _id: string;
   userId: string;
@@ -78,7 +87,7 @@ interface TimeBlockState {
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || (
   import.meta.env.PROD 
-    ? 'https://trae5tthwuf3-straydogsyn-eric-hunter-petross-projects.vercel.app/api'
+    ? 'https://trae5tthwuf3.vercel.app/api'
     : 'http://localhost:5000/api'
 );
 
@@ -120,13 +129,16 @@ export const useTimeBlockStore = create<TimeBlockState>((set, get) => ({
       const { timeBlocks } = response.data.data;
 
       // Convert date strings to Date objects
-      const processedTimeBlocks = timeBlocks.map((block: any) => ({
-        ...block,
-        startTime: new Date(block.startTime),
-        endTime: new Date(block.endTime),
-        createdAt: new Date(block.createdAt),
-        updatedAt: new Date(block.updatedAt)
-      }));
+      const processedTimeBlocks = timeBlocks.map((block: unknown) => {
+        const timeBlock = block as TimeBlock;
+        return {
+          ...timeBlock,
+          startTime: new Date(timeBlock.startTime),
+          endTime: new Date(timeBlock.endTime),
+          createdAt: new Date(timeBlock.createdAt),
+          updatedAt: new Date(timeBlock.updatedAt)
+        };
+      });
 
       set({
         timeBlocks: processedTimeBlocks,
@@ -134,8 +146,9 @@ export const useTimeBlockStore = create<TimeBlockState>((set, get) => ({
         isLoading: false,
         error: null
       });
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch time blocks';
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      const errorMessage = apiError.response?.data?.message || 'Failed to fetch time blocks';
       set({
         isLoading: false,
         error: errorMessage
@@ -163,8 +176,9 @@ export const useTimeBlockStore = create<TimeBlockState>((set, get) => ({
         isLoading: false,
         error: null
       });
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch time block';
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      const errorMessage = apiError.response?.data?.message || 'Failed to fetch time block';
       set({
         isLoading: false,
         error: errorMessage
@@ -181,21 +195,25 @@ export const useTimeBlockStore = create<TimeBlockState>((set, get) => ({
       });
       const { timeBlocks } = response.data.data;
 
-      const processedTimeBlocks = timeBlocks.map((block: any) => ({
-        ...block,
-        startTime: new Date(block.startTime),
-        endTime: new Date(block.endTime),
-        createdAt: new Date(block.createdAt),
-        updatedAt: new Date(block.updatedAt)
-      }));
+      const processedTimeBlocks = timeBlocks.map((block: unknown) => {
+        const timeBlock = block as TimeBlock;
+        return {
+          ...timeBlock,
+          startTime: new Date(timeBlock.startTime),
+          endTime: new Date(timeBlock.endTime),
+          createdAt: new Date(timeBlock.createdAt),
+          updatedAt: new Date(timeBlock.updatedAt)
+        };
+      });
 
       set({
         timeBlocks: processedTimeBlocks,
         isLoading: false,
         error: null
       });
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch calendar range';
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      const errorMessage = apiError.response?.data?.message || 'Failed to fetch calendar range';
       set({
         isLoading: false,
         error: errorMessage
@@ -210,13 +228,16 @@ export const useTimeBlockStore = create<TimeBlockState>((set, get) => ({
       const response = await axios.get(`${API_BASE_URL}/timeblocks/today/schedule`);
       const { timeBlocks, currentBlock } = response.data.data;
 
-      const processedTimeBlocks = timeBlocks.map((block: any) => ({
-        ...block,
-        startTime: new Date(block.startTime),
-        endTime: new Date(block.endTime),
-        createdAt: new Date(block.createdAt),
-        updatedAt: new Date(block.updatedAt)
-      }));
+      const processedTimeBlocks = timeBlocks.map((block: unknown) => {
+        const timeBlock = block as TimeBlock;
+        return {
+          ...timeBlock,
+          startTime: new Date(timeBlock.startTime),
+          endTime: new Date(timeBlock.endTime),
+          createdAt: new Date(timeBlock.createdAt),
+          updatedAt: new Date(timeBlock.updatedAt)
+        };
+      });
 
       const processedCurrentBlock = currentBlock ? {
         ...currentBlock,
@@ -232,8 +253,9 @@ export const useTimeBlockStore = create<TimeBlockState>((set, get) => ({
         isLoading: false,
         error: null
       });
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch today\'s schedule';
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      const errorMessage = apiError.response?.data?.message || 'Failed to fetch today\'s schedule';
       set({
         isLoading: false,
         error: errorMessage
@@ -267,8 +289,9 @@ export const useTimeBlockStore = create<TimeBlockState>((set, get) => ({
       }));
 
       return processedTimeBlock;
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to create time block';
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      const errorMessage = apiError.response?.data?.message || 'Failed to create time block';
       set({
         isLoading: false,
         error: errorMessage
@@ -298,8 +321,9 @@ export const useTimeBlockStore = create<TimeBlockState>((set, get) => ({
         isLoading: false,
         error: null
       }));
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to update time block';
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      const errorMessage = apiError.response?.data?.message || 'Failed to update time block';
       set({
         isLoading: false,
         error: errorMessage
@@ -329,8 +353,9 @@ export const useTimeBlockStore = create<TimeBlockState>((set, get) => ({
         isLoading: false,
         error: null
       }));
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to update time block status';
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      const errorMessage = apiError.response?.data?.message || 'Failed to update time block status';
       set({
         isLoading: false,
         error: errorMessage
@@ -351,8 +376,9 @@ export const useTimeBlockStore = create<TimeBlockState>((set, get) => ({
         isLoading: false,
         error: null
       }));
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to delete time block';
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      const errorMessage = apiError.response?.data?.message || 'Failed to delete time block';
       set({
         isLoading: false,
         error: errorMessage

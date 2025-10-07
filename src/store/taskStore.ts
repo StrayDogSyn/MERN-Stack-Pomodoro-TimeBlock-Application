@@ -1,6 +1,15 @@
 import { create } from 'zustand';
 import axios from 'axios';
 
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+  message?: string;
+}
+
 export interface Task {
   _id: string;
   userId: string;
@@ -67,7 +76,7 @@ interface TaskState {
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || (
   import.meta.env.PROD 
-    ? 'https://trae5tthwuf3-straydogsyn-eric-hunter-petross-projects.vercel.app/api'
+    ? 'https://trae5tthwuf3.vercel.app/api'
     : 'http://localhost:5000/api'
 );
 
@@ -113,8 +122,9 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         isLoading: false,
         error: null
       });
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch tasks';
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      const errorMessage = apiError.response?.data?.message || 'Failed to fetch tasks';
       set({
         isLoading: false,
         error: errorMessage
@@ -134,8 +144,9 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         isLoading: false,
         error: null
       });
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to fetch task';
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      const errorMessage = apiError.response?.data?.message || 'Failed to fetch task';
       set({
         isLoading: false,
         error: errorMessage
@@ -157,8 +168,9 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       }));
 
       return task;
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to create task';
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      const errorMessage = apiError.response?.data?.message || 'Failed to create task';
       set({
         isLoading: false,
         error: errorMessage
@@ -180,8 +192,9 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         isLoading: false,
         error: null
       }));
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to update task';
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      const errorMessage = apiError.response?.data?.message || 'Failed to update task';
       set({
         isLoading: false,
         error: errorMessage
@@ -203,8 +216,9 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         isLoading: false,
         error: null
       }));
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to update task status';
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      const errorMessage = apiError.response?.data?.message || 'Failed to update task status';
       set({
         isLoading: false,
         error: errorMessage
@@ -225,8 +239,9 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         isLoading: false,
         error: null
       }));
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Failed to delete task';
+    } catch (error: unknown) {
+      const apiError = error as ApiError;
+      const errorMessage = apiError.response?.data?.message || 'Failed to delete task';
       set({
         isLoading: false,
         error: errorMessage

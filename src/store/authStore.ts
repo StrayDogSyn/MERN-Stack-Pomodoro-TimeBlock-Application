@@ -2,6 +2,15 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import axios from 'axios';
 
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+  message?: string;
+}
+
 export interface User {
   _id: string;
   username: string;
@@ -54,7 +63,7 @@ interface AuthState {
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || (
   import.meta.env.PROD 
-    ? 'https://trae5tthwuf3-straydogsyn-eric-hunter-petross-projects.vercel.app/api'
+    ? 'https://trae5tthwuf3.vercel.app/api'
     : 'http://localhost:5000/api'
 );
 
@@ -90,8 +99,9 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
             error: null
           });
-        } catch (error: any) {
-          const errorMessage = error.response?.data?.message || 'Login failed';
+        } catch (error: unknown) {
+          const apiError = error as ApiError;
+          const errorMessage = apiError.response?.data?.message || 'Login failed';
           set({
             isLoading: false,
             error: errorMessage,
@@ -120,8 +130,9 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
             error: null
           });
-        } catch (error: any) {
-          const errorMessage = error.response?.data?.message || 'Registration failed';
+        } catch (error: unknown) {
+          const apiError = error as ApiError;
+          const errorMessage = apiError.response?.data?.message || 'Registration failed';
           set({
             isLoading: false,
             error: errorMessage,
@@ -160,7 +171,7 @@ export const useAuthStore = create<AuthState>()(
           axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
           
           set({ token: newToken });
-        } catch (error) {
+        } catch {
           // If refresh fails, logout user
           get().logout();
         }
@@ -184,8 +195,9 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
             error: null
           });
-        } catch (error: any) {
-          const errorMessage = error.response?.data?.message || 'Profile update failed';
+        } catch (error: unknown) {
+          const apiError = error as ApiError;
+          const errorMessage = apiError.response?.data?.message || 'Profile update failed';
           set({
             isLoading: false,
             error: errorMessage
@@ -215,8 +227,9 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
             error: null
           });
-        } catch (error: any) {
-          const errorMessage = error.response?.data?.message || 'Preferences update failed';
+        } catch (error: unknown) {
+          const apiError = error as ApiError;
+          const errorMessage = apiError.response?.data?.message || 'Preferences update failed';
           set({
             isLoading: false,
             error: errorMessage
