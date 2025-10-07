@@ -44,132 +44,156 @@ graph TD
 
 ## 2. Technology Description
 
-- **Frontend**: React@18.3.1 + TypeScript + Vite + TailwindCSS@3.4.7
-- **Backend**: Node.js + Express@4 + TypeScript + Socket.io@4.7.5
-- **Database**: MongoDB with Mongoose ODM
-- **Authentication**: JWT (JSON Web Tokens)
-- **Real-time**: Socket.io for live session updates
-- **State Management**: Zustand@4.5.4
-- **Forms**: React Hook Form@7.52.2
-- **Animations**: Framer Motion@11.3.24
-- **Charts**: Recharts@2.12.7
-- **Icons**: Lucide React@0.400.0
-- **HTTP Client**: Axios@1.7.2
-- **Development**: Concurrently for parallel dev servers
+* **Frontend**: React\@18.3.1 + TypeScript + Vite + TailwindCSS\@3.4.7
+
+* **Backend**: Node.js + Express\@4 + TypeScript + Socket.io\@4.7.5
+
+* **Database**: MongoDB with Mongoose ODM
+
+* **Authentication**: JWT (JSON Web Tokens)
+
+* **Real-time**: Socket.io for live session updates
+
+* **State Management**: Zustand\@4.5.4
+
+* **Forms**: React Hook Form\@7.52.2
+
+* **Animations**: Framer Motion\@11.3.24
+
+* **Charts**: Recharts\@2.12.7
+
+* **Icons**: Lucide React\@0.400.0
+
+* **HTTP Client**: Axios\@1.7.2
+
+* **Development**: Concurrently for parallel dev servers
 
 ## 3. Route Definitions
 
-| Route | Purpose |
-|-------|---------|
-| / | Dashboard page, displays user statistics and quick timer access |
-| /timer | Main timer page with Pomodoro functionality and time block scheduler |
-| /analytics | Analytics dashboard with session statistics and productivity charts |
-| /schedule | Calendar view for time block planning and task management |
-| /settings | User preferences, timer configuration, and account settings |
-| /login | User authentication page with email/password login |
-| /register | User registration page with email verification |
-| /forgot-password | Password reset functionality |
-| /profile | User profile management and account details |
+| Route            | Purpose                                                              |
+| ---------------- | -------------------------------------------------------------------- |
+| /                | Dashboard page, displays user statistics and quick timer access      |
+| /timer           | Main timer page with Pomodoro functionality and time block scheduler |
+| /analytics       | Analytics dashboard with session statistics and productivity charts  |
+| /schedule        | Calendar view for time block planning and task management            |
+| /settings        | User preferences, timer configuration, and account settings          |
+| /login           | User authentication page with email/password login                   |
+| /register        | User registration page with email verification                       |
+| /forgot-password | Password reset functionality                                         |
+| /profile         | User profile management and account details                          |
 
 ## 4. API Definitions
 
 ### 4.1 Core API
 
 **User Authentication**
+
 ```
 POST /api/auth/register
 ```
 
 Request:
-| Param Name | Param Type | isRequired | Description |
-|------------|------------|------------|-------------|
-| email | string | true | User email address |
-| password | string | true | Password (minimum 8 characters) |
-| name | string | true | User full name |
+
+| Param Name | Param Type | isRequired | Description                     |
+| ---------- | ---------- | ---------- | ------------------------------- |
+| email      | string     | true       | User email address              |
+| password   | string     | true       | Password (minimum 8 characters) |
+| name       | string     | true       | User full name                  |
 
 Response:
-| Param Name | Param Type | Description |
-|------------|------------|-------------|
-| success | boolean | Registration status |
-| message | string | Success or error message |
-| token | string | JWT authentication token |
+
+| Param Name | Param Type | Description              |
+| ---------- | ---------- | ------------------------ |
+| success    | boolean    | Registration status      |
+| message    | string     | Success or error message |
+| token      | string     | JWT authentication token |
 
 ```
 POST /api/auth/login
 ```
 
 Request:
-| Param Name | Param Type | isRequired | Description |
-|------------|------------|------------|-------------|
-| email | string | true | User email address |
-| password | string | true | User password |
+
+| Param Name | Param Type | isRequired | Description        |
+| ---------- | ---------- | ---------- | ------------------ |
+| email      | string     | true       | User email address |
+| password   | string     | true       | User password      |
 
 Response:
-| Param Name | Param Type | Description |
-|------------|------------|-------------|
-| success | boolean | Login status |
-| token | string | JWT authentication token |
-| user | object | User profile information |
+
+| Param Name | Param Type | Description              |
+| ---------- | ---------- | ------------------------ |
+| success    | boolean    | Login status             |
+| token      | string     | JWT authentication token |
+| user       | object     | User profile information |
 
 **Session Management**
+
 ```
 POST /api/sessions
 ```
 
 Request:
-| Param Name | Param Type | isRequired | Description |
-|------------|------------|------------|-------------|
-| type | string | true | Session type (work/break/long-break) |
-| duration | number | true | Session duration in minutes |
-| taskId | string | false | Associated task ID |
+
+| Param Name | Param Type | isRequired | Description                          |
+| ---------- | ---------- | ---------- | ------------------------------------ |
+| type       | string     | true       | Session type (work/break/long-break) |
+| duration   | number     | true       | Session duration in minutes          |
+| taskId     | string     | false      | Associated task ID                   |
 
 ```
 GET /api/sessions
 ```
 
 Response:
-| Param Name | Param Type | Description |
-|------------|------------|-------------|
-| sessions | array | Array of user session objects |
-| totalSessions | number | Total number of sessions |
-| totalFocusTime | number | Total focus time in minutes |
+
+| Param Name     | Param Type | Description                   |
+| -------------- | ---------- | ----------------------------- |
+| sessions       | array      | Array of user session objects |
+| totalSessions  | number     | Total number of sessions      |
+| totalFocusTime | number     | Total focus time in minutes   |
 
 **Time Block Management**
+
 ```
 POST /api/timeblocks
 ```
 
 Request:
-| Param Name | Param Type | isRequired | Description |
-|------------|------------|------------|-------------|
-| title | string | true | Time block title |
-| startTime | string | true | ISO date string for start time |
-| endTime | string | true | ISO date string for end time |
-| taskId | string | false | Associated task ID |
-| color | string | false | Color code for visual identification |
+
+| Param Name | Param Type | isRequired | Description                          |
+| ---------- | ---------- | ---------- | ------------------------------------ |
+| title      | string     | true       | Time block title                     |
+| startTime  | string     | true       | ISO date string for start time       |
+| endTime    | string     | true       | ISO date string for end time         |
+| taskId     | string     | false      | Associated task ID                   |
+| color      | string     | false      | Color code for visual identification |
 
 ```
 GET /api/timeblocks
 ```
 
 Query Parameters:
-| Param Name | Param Type | isRequired | Description |
-|------------|------------|------------|-------------|
-| startDate | string | false | Filter start date (ISO format) |
-| endDate | string | false | Filter end date (ISO format) |
+
+| Param Name | Param Type | isRequired | Description                    |
+| ---------- | ---------- | ---------- | ------------------------------ |
+| startDate  | string     | false      | Filter start date (ISO format) |
+| endDate    | string     | false      | Filter end date (ISO format)   |
 
 **Analytics**
+
 ```
 GET /api/analytics/stats
 ```
 
 Response:
-| Param Name | Param Type | Description |
-|------------|------------|-------------|
-| dailyStats | object | Daily productivity statistics |
-| weeklyStats | object | Weekly productivity trends |
-| monthlyStats | object | Monthly performance data |
-| productivityScore | number | Overall productivity score (0-100) |
+
+| Param Name        | Param Type | Description                        |
+| ----------------- | ---------- | ---------------------------------- |
+| dailyStats        | object     | Daily productivity statistics      |
+| weeklyStats       | object     | Weekly productivity trends         |
+| monthlyStats      | object     | Monthly performance data           |
+| productivityScore | number     | Overall productivity score (0-100) |
 
 ## 5. Server Architecture Diagram
 
@@ -276,6 +300,7 @@ erDiagram
 ### 6.2 Data Definition Language
 
 **User Collection**
+
 ```javascript
 // User schema
 const userSchema = new mongoose.Schema({
@@ -318,6 +343,7 @@ userSchema.index({ created_at: -1 });
 ```
 
 **Session Collection**
+
 ```javascript
 // Session schema
 const sessionSchema = new mongoose.Schema({
@@ -371,6 +397,7 @@ sessionSchema.index({ started_at: 1 });
 ```
 
 **TimeBlock Collection**
+
 ```javascript
 // TimeBlock schema
 const timeBlockSchema = new mongoose.Schema({
@@ -421,6 +448,7 @@ timeBlockSchema.index({ user_id: 1, end_time: 1 });
 ```
 
 **Task Collection**
+
 ```javascript
 // Task schema
 const taskSchema = new mongoose.Schema({
@@ -471,6 +499,7 @@ taskSchema.index({ user_id: 1, created_at: -1 });
 ```
 
 **Initial Data Setup**
+
 ```javascript
 // Default user preferences
 const defaultPreferences = {
@@ -491,3 +520,4 @@ const defaultTaskCategories = [
   { name: 'Exercise', color: '#C2C2C2' }
 ];
 ```
+
