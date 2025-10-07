@@ -21,7 +21,11 @@ const server = createServer(app);
 // Socket.io setup
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: [
+      process.env.CLIENT_URL || "http://localhost:5173",
+      "https://traesithhur3.vercel.app",
+      "https://trae5tthwuf3-straydogsyn-eric-hunter-petross-projects.vercel.app"
+    ],
     methods: ["GET", "POST"]
   }
 });
@@ -31,8 +35,14 @@ connectDatabase();
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5173",
-  credentials: true
+  origin: [
+    process.env.CLIENT_URL || "http://localhost:5173",
+    "https://traesithhur3.vercel.app",
+    "https://trae5tthwuf3-straydogsyn-eric-hunter-petross-projects.vercel.app"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
