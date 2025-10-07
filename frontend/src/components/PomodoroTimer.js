@@ -15,6 +15,27 @@ const PomodoroTimer = ({ task, onSessionComplete }) => {
     longBreak: 15
   };
 
+  const handleTimerComplete = async () => {
+    setIsActive(false);
+    
+    if (sessionId) {
+      try {
+        await pomodoroService.completeSession(sessionId);
+        if (onSessionComplete) {
+          onSessionComplete();
+        }
+      } catch (error) {
+        console.error('Error completing session:', error);
+      }
+    }
+
+    // Play notification sound (browser API)
+    const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZUR8NUqvm8bhdFgpJp+LyvmsfBDCF0/HWhzQGHm/A7+OaUh0MUqvm8bhdFwlHp+HyvmwfAy6Cz/PWijYHIXHD8OScVBwLUK3j8rtfGQhFpeDxvmwfAy6Cz/PWijYHIXHD8OScVBwLUK3j8rtfGQdDo97wv24gBS+Bz/PXizYHIXHD8OScVRsLUK3j8rteGQdDo97wv28gBS+Bz/PXizYHIXHD8OScVRsLUK3j8rteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8Q==');
+    audio.play().catch(() => {});
+
+    alert(`${timerType === 'work' ? 'Work' : 'Break'} session completed!`);
+  };
+
   useEffect(() => {
     if (isActive && (minutes > 0 || seconds > 0)) {
       intervalRef.current = setInterval(() => {
@@ -34,28 +55,8 @@ const PomodoroTimer = ({ task, onSessionComplete }) => {
     }
 
     return () => clearInterval(intervalRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isActive, minutes, seconds]);
-
-  const handleTimerComplete = async () => {
-    setIsActive(false);
-    
-    if (sessionId) {
-      try {
-        await pomodoroService.completeSession(sessionId);
-        if (onSessionComplete) {
-          onSessionComplete();
-        }
-      } catch (error) {
-        console.error('Error completing session:', error);
-      }
-    }
-
-    // Play notification sound (browser API)
-    const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZUR8NUqvm8bhdFgpJp+LyvmsfBDCF0/HWhzQGHm/A7+OaUh0MUqvm8bhdFwlHp+HyvmwfAy6Cz/PWijYHIXHD8OScVBwLUK3j8rtfGQhFpeDxvmwfAy6Cz/PWijYHIXHD8OScVBwLUK3j8rtfGQdDo97wv24gBS+Bz/PXizYHIXHD8OScVRsLUK3j8rteGQdDo97wv28gBS+Bz/PXizYHIXHD8OScVRsLUK3j8rteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8bteGQZCot3wv28gBS+Bz/PXizYHIXHD8OScVRsLT6zj8Q==');
-    audio.play().catch(() => {});
-
-    alert(`${timerType === 'work' ? 'Work' : 'Break'} session completed!`);
-  };
 
   const startTimer = async () => {
     setIsActive(true);

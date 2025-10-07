@@ -9,10 +9,6 @@ const Analytics = () => {
     endDate: new Date().toISOString().split('T')[0]
   });
 
-  useEffect(() => {
-    fetchAnalytics();
-  }, [dateRange]);
-
   const fetchAnalytics = async () => {
     try {
       setLoading(true);
@@ -24,6 +20,11 @@ const Analytics = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchAnalytics();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateRange]);
 
   const handleDateChange = (e) => {
     setDateRange({
