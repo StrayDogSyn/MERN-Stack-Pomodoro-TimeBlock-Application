@@ -1,1 +1,13 @@
-{"version": 2,"builds": [{"src": "api/index.ts","use": "@vercel/node"}],"routes": [{"src": "/api/(.*)","dest": "/api/index.ts"},{"src": "/(.*)","dest": "/index.html"}]}
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.ts"
+    },
+    {
+      "source": "/((?!favicon\\.svg|favicon\\.ico).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
