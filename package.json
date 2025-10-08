@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "description": "Premium MERN Stack Pomodoro TimeBlock Application with Glassmorphic Design",
   "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "client:dev": "vite",
     "build": "vite build",
