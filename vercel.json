@@ -1,8 +1,7 @@
 {
   "functions": {
     "api/index.ts": {
-      "runtime": "@vercel/node",
-      "maxDuration": 30
+      "runtime": "@vercel/node@20.x"
     }
   },
   "rewrites": [
@@ -14,8 +13,5 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
