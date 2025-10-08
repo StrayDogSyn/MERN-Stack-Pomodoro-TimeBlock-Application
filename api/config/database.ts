@@ -9,11 +9,15 @@ const MONGODB_URI = process.env.NODE_ENV === 'production'
 
 export const connectDatabase = async (): Promise<void> => {
   try {
+    console.log('Attempting to connect to MongoDB...');
+    console.log('NODE_ENV:', process.env.NODE_ENV);
+    console.log('MONGODB_URI exists:', !!process.env.MONGODB_URI);
+    
     const conn = await mongoose.connect(MONGODB_URI);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.error('Database connection error:', error);
-    process.exit(1);
+    throw error; // Don't exit in serverless environment
   }
 };
 

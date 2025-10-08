@@ -31,8 +31,10 @@ const io = new Server(server, {
   }
 });
 
-// Connect to database
-connectDatabase();
+// Connect to database (async for serverless)
+connectDatabase().catch(error => {
+  console.error('Failed to connect to database:', error);
+});
 
 // Middleware
 app.use(cors({
@@ -114,7 +116,7 @@ io.on('connection', (socket) => {
 });
 
 // Error handling middleware
-app.use((err: Error & { status?: number }, req: express.Request, res: express.Response) => {
+app.use((err: Error & { status?: number }, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Error:', err);
   res.status(err.status || 500).json({
     success: false,

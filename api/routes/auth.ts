@@ -9,6 +9,7 @@ const router = express.Router();
 // Register new user
 router.post('/register', validateRegistration, async (req: Request, res: Response): Promise<void> => {
   try {
+    console.log('Registration request received:', req.body);
     const { username, email, password, firstName, lastName } = req.body;
 
     // Check if user already exists
@@ -17,6 +18,7 @@ router.post('/register', validateRegistration, async (req: Request, res: Respons
     });
 
     if (existingUser) {
+      console.log('User already exists:', existingUser.email === email ? 'Email' : 'Username');
       res.status(400).json({
         success: false,
         message: existingUser.email === email ? 'Email already registered' : 'Username already taken'
@@ -34,6 +36,7 @@ router.post('/register', validateRegistration, async (req: Request, res: Respons
     });
 
     await user.save();
+    console.log('User created successfully:', user._id);
 
     // Generate JWT token
     const token = generateToken(user._id);
@@ -58,7 +61,8 @@ router.post('/register', validateRegistration, async (req: Request, res: Respons
     console.error('Registration error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error during registration'
+      message: 'Server error during registration',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
