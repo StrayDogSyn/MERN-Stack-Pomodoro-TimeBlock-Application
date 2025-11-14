@@ -1,7 +1,7 @@
 {
   "name": "straydog-pomodoro-timeblock",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Premium MERN Stack Pomodoro TimeBlock Application with Glassmorphic Design",
   "type": "module",
   "engines": {
